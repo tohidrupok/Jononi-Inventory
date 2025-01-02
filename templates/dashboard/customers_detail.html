@@ -1,0 +1,103 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Customer Detail Page{% endblock %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Start page wrapper -->
+<div class="page-wrapper d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="page-content w-100">    
+        <div class="row justify-content-center my-4">
+            <div class="col-md-8">
+                <div class="card shadow border-0 rounded-lg overflow-hidden">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 style="color: white;" class="mb-0">Employee Detail</h5>
+                    </div>
+                    <div class="row p-4">
+                        <div class="col-md-5 d-flex justify-content-center align-items-center">
+                            <img class="img-fluid img-thumbnail rounded-circle shadow" 
+                                 src="{{ customers.profile.image.url }}" 
+                                 alt="Profile Image" 
+                                 style="max-width: 200px; height: auto;">
+                        </div>
+                        <div class="col-md-7">
+                            <h5 class="mb-3">Profile Information</h5>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Title:</th>
+                                        <td>{{ customers.profile.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Name:</th>
+                                        <td>{{ customers.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Email:</th>
+                                        <td>{{ customers.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Phone:</th>
+                                        <td>{{ customers.profile.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Address:</th>
+                                        <td>{{ customers.profile.address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">NID:</th>
+                                        <td>{{ customers.profile.nid }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Salary:</th>
+                                        <td>{{ customers.profile.salary }} BDT</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Job Location:</th>
+                                        <td>{{ customers.profile.job_location }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-muted">Joining Date:</th>
+                                        <td>{{ customers.profile.joining_date }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .page-wrapper {
+        background-color: #f0f4f8;
+        padding: 20px;
+    }
+    .card {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    .card-header {
+        font-weight: 600;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+    .table th {
+        font-weight: 600;
+        color: #343a40;
+    }
+    .table td {
+        color: #495057;
+    }
+    hr {
+        border: 1px solid #007bff;
+    }
+    .img-thumbnail {
+        border: 3px solid #0056b3;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

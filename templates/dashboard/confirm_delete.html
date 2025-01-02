@@ -1,0 +1,20 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Confirm Delete</h5>
+                <p>Are you sure you want to delete the shop <strong>{{ shop.shop_name }}</strong>?</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <a href="{% url 'add-shope' %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Transaction History{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Finance and Accounting Division</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">History</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        
+        <h1 class="mb-4 text-primary">Transaction History</h1>
+
+        <style>
+            /* General Styling */
+            .page-wrapper {
+                background-color: #f4f8fb;
+                padding: 30px 0;
+            }
+
+            .container {
+                max-width: 1200px;
+            }
+
+            .list-group-item {
+                border: none;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+            }
+
+            .list-group-item:hover {
+                background-color: #f7f7f7;
+                transform: scale(1.02);
+            }
+
+            .credit-type {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #343a40;
+            }
+
+            .credit-details {
+                font-size: 1rem;
+                color: #495057;
+            }
+
+            .amount {
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+
+            .date,
+            .description {
+                margin-top: 5px;
+                font-size: 0.9rem;
+            }
+
+            .text-success {
+                color: #28a745;
+            }
+
+            .text-danger {
+                color: #dc3545;
+            }
+
+            /* Alert Box Styling */
+            .alert-warning {
+                text-align: center;
+                font-size: 1.2rem;
+                background-color: #fff3cd;
+                color: #856404;
+                border-color: #ffeeba;
+                border-radius: 8px;
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            /* Pagination Styling */
+            .pagination {
+                justify-content: center;
+                align-items: center;
+            }
+
+            .pagination a {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 20px;
+                border-radius: 30px;
+                margin: 0 5px;
+                text-decoration: none;
+            }
+
+            .pagination a:hover {
+                background-color: #0056b3;
+            }
+
+            .pagination .disabled {
+                background-color: #c6c6c6;
+                cursor: not-allowed;
+            }
+        </style>
+
+        <h1 class="text-center mb-4">Credits List</h1>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-11">
+                    {% if page_obj %}
+                    <div class="list-group">
+                        {% for credit in page_obj %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="credit-type">
+                                <strong>ID: {{ credit.id }} <br>{{ credit.get_type_display }}</strong>
+                            </div> 
+                            
+                            
+                            <div class="credit-details text-end">
+                                <div class="amount">
+                                    Amount: <span class="text-success">{{ credit.amount }}</span>
+                                </div>
+                                {% if credit.get_type_display != "Demand item Price" %}
+                                    <div class="date">Date: {{ credit.date }}</div>
+                                    <div class="date">Percentage: {{ credit.persantage }}</div>
+                                    <div style="color: red;" class="date">Returned amount: {{ credit.returned_amount }}</div>
+                                {% endif %}
+                               
+                                <div class="description">Description: {{ credit.description }}</div>
+                            </div>
+                            
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning" role="alert">
+                        No credits found.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination mt-4">
+            <!-- Previous Button -->
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary rounded-pill px-4 py-2 me-2 d-flex align-items-center">
+                <i class="bx bx-chevron-left me-2"></i>Previous
+            </a>
+            {% endif %}
+            
+            <!-- Page Info -->
+            <span class="mx-2 text-muted">
+                <strong>Page {{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong>
+            </span>
+            
+            <!-- Next Button -->
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary rounded-pill px-4 py-2 ms-2 d-flex align-items-center">
+                Next <i class="bx bx-chevron-right ms-2"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

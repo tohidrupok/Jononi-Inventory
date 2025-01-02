@@ -1,0 +1,318 @@
+{% extends 'partials/base0.html' %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated and user.is_staff and user.is_superuser %}
+<div class="page-wrapper">
+    <div class="page-content">
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4"> 
+
+                <div class="col">
+                    <div class="card radius-10 bg-gradient-ohhappiness">
+                     <div class="card-body">
+                      <a class="text-decoration-none" href="{% url 'order_summary' %}"> 
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 text-white">Warehouse Summary </h5>
+                            <div class="ms-auto">
+                              <i class='bx bx-time fs-3 text-white'></i>
+                          </div>
+                        </div>
+                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex align-items-center text-white">
+                            <p class="mb-0">Total Warehouse Order</p>
+                            <p class="mb-0 ms-auto">+2.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                        </div></a>
+                    </div>
+                 </div>
+                </div> 
+
+
+              {% comment %} <div class="col">
+                <div class="card radius-10 bg-gradient-ohhappiness">
+                <div class="card-body">
+                    <a class="text-decoration-none" href="{% url 'dashboard-customers' %}"> 
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 text-white">{{ customer_count }} Employee</h5>
+                        <div class="ms-auto">
+                            <i class='bx bx-group fs-3 text-white'></i>
+                        </div>
+                    </div>
+                    <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="d-flex align-items-center text-white">
+                        <p class="mb-0">Total User</p>
+                        <p class="mb-0 ms-auto">+5.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                    </div> </a>
+                </div>
+            </div>
+            </div>  {% endcomment %}
+
+                <div class="col">
+                    <div class="card radius-10 bg-gradient-deepblue">
+                     <div class="card-body">
+                        <a class="text-decoration-none" href="{% url 'dashboard-products' %}">
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 text-white">{{ product_count }} Products</h5>
+                            <div class="ms-auto">
+                              <i class='bx bx-package fs-3 text-white'></i>
+                          </div>
+                          
+                          
+                        </div>
+                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex align-items-center text-white">
+                            <p class="mb-0">Total Products</p>
+                            <p class="mb-0 ms-auto">+4.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                        </div>  </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 bg-gradient-orange">
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="{% url 'order' %}"> 
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 text-white">{{ order_count }} Warehouse Selles Orders</h5>
+                            <div class="ms-auto">
+                              <i class='bx bx-cart fs-3 text-white'></i>
+                          </div>
+                        </div>
+                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex align-items-center text-white">
+                            <p class="mb-0">Total SR Orders</p>
+                            <p class="mb-0 ms-auto">+1.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                        </div> </a>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card radius-10 bg-gradient-ibiza">
+                     <div class="card-body">
+                      <a class="text-decoration-none" href="{% url 'dealers_demand' %}"> 
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 text-white">{{ demand_count }} Warehouse Demand Orders</h5>
+                            <div class="ms-auto">
+                              <i class='bx bx-time fs-3 text-white'></i>
+                          </div>
+                        </div>
+                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex align-items-center text-white">
+                            <p class="mb-0">Total Dealer Order</p>
+                            <p class="mb-0 ms-auto">+2.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                        </div></a>
+                    </div>
+                 </div>
+                </div>
+                {% comment %} <div class="col">
+                    <div class="card radius-10 bg-gradient-ibiza">
+                     <div class="card-body">
+                      <a class="text-decoration-none" href="{% url 'order_summary' %}"> 
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 text-white">Warehouse Summary </h5>
+                            <div class="ms-auto">
+                              <i class='bx bx-time fs-3 text-white'></i>
+                          </div>
+                        </div>
+                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex align-items-center text-white">
+                            <p class="mb-0">Total Warehouse Order</p>
+                            <p class="mb-0 ms-auto">+2.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
+                        </div></a>
+                    </div>
+                 </div>
+                </div> {% endcomment %}
+            </div><!--end row-->
+        
+             <div class="row">
+                <div class="col-12 col-lg-6 col-xl-4 d-flex">
+                  <div class="card radius-10 overflow-hidden w-100">
+                     <div class="card-body">
+                       <p>Total Earning</p>
+                       <h4 class="mb-0">={{total_order_price}} BDT</h4>
+                       <small>1.4% <i class="zmdi zmdi-long-arrow-up"></i> Since Last Month</small>
+                       <hr>
+                       <p>Total Sales</p>
+                       <h4 class="mb-0">={{total_debit}} BDT</h4>
+                       <small>5.43% <i class="zmdi zmdi-long-arrow-up"></i> Since Last Month</small>
+
+                       <hr>
+                       <p>Net Cash Flow</p>
+                       <h4 class="mb-0">={{profit}} BDT</h4>
+                       <small>5.43% <i class="zmdi zmdi-long-arrow-up"></i> Since Last Month</small>
+                       <div class="mt-5">
+                       <div class="chart-container-4">
+                         <canvas id="chart5"></canvas>
+                        </div>
+                      </div>
+                     </div>
+                  </div>
+                </div>
+          
+                <div class="col-12 col-lg-6 col-xl-8 d-flex">
+                   <div class="card radius-10 w-100">
+                       <div class="card-header border-bottom bg-transparent">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h6 class="mb-0">Offers Available Today</h6>
+                            </div>
+                            <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
+                            </div>
+                        </div>
+                    </div>
+                     <ul class="list-group list-group-flush"> 
+
+                    <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product & Code</th>
+                            <th>Discount (%)</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for offer in offers %}
+                        <tr>
+                            <td>{{ offer.product.name }} -- {{ offer.product.product_code }}</td>
+                            <td>{{ offer.discount_percentage }}%</td>
+                            <td>{{ offer.start_date }}</td>
+                            <td>{{ offer.end_date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="no-offers">No active offers available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                        
+                        
+                      </ul>
+                   </div>
+                </div>
+              </div><!--End Row-->
+
+
+              <div class="card radius-10">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            
+                            <h5 class="mb-0"> Today Total amount = {{today_total_sell |floatformat:2 }} BDT  <span class="text-danger fw-bold">Live</span> <span class="spinner-border spinner-border-sm text-danger align-end" role="status" aria-hidden="true"></span></h5>
+                       
+                        </div>
+                        <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                          
+                            {% for final_order in final_orders %}
+                            
+                            <table class="table table-sm table-bordered">
+                              <thead>
+                                  <tr>
+                                      <th style="color: white;">Date</th>                                
+                                      <th style="color: white;" >Warehouse</th>
+                                      <th style="color: white;">Customer Name</th>
+                                      <th style="color: white;">Product Code & Name</th>
+                                      <th style="color: white;">Quantity</th>
+                                      <th style="color: white;">Net Amount</th>
+                                      <th style="color: white;">Discount</th>
+                                      <th style="color: white;">Gross Amount</th>
+                                  </tr>
+                              </thead>
+                              <tbody> 
+                                  {% for order in final_order.orders.all %}
+                                  <tr class="{% if forloop.counter|divisibleby:2 %}table-light{% else %}table-info{% endif %}">
+                                      
+                                      <td>{{ order.created_at }}</td>
+                                      <td>{{ order.customer }}</td>
+                                      <td>{{ order.shop.shop_name }}, {{ order.shop.zone.area }}, {{ order.shop.zone.thana }}</td>
+                                      <td>{{ order.name.product_code }} --- {{ order.name.name }}</td>
+                                      <td>{{ order.order_quantity }}</td>
+                                      <td>{{ order.net_amount |floatformat:2}}</td>
+                                      <td>{{ order.discount_amount |floatformat:2}}</td>
+                                      <td>{{ order.gross_amount |floatformat:2}}</td>
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>                                              
+                                                          
+                                  <tr style=" background-color: blue; color:whitesmoke;">
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td>Total: </td>
+                                      <td style="color: black;">{{ final_order.total_quantity }}</td>
+
+                                      <td style="color: black;" >৳ {{ final_order.total_net_amount |floatformat:2}}</td>
+                                      <td style="color: black;">৳ {{ final_order.total_discount_amount |floatformat:2}}</td>
+                                      <td style="color: black;">৳ {{ final_order.total_gross_amount |floatformat:2}}</td>
+                                  </tr>                                         
+                              
+                          </table>
+
+                           
+                            {% endfor %}
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<style>
+  body {
+      background-color: #f8f9fa;
+  }
+  .container {
+      margin-top: 50px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+  }
+  h1 {
+      color: #28a745; /* Green color for the title */
+      margin-bottom: 20px;
+  }
+  .table {
+      border-collapse: separate;
+      border-spacing: 0 10px;
+  }
+  .table th {
+      background-color: #28a745; /* Green header */
+      color: white;
+  }
+  .table td {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+  }
+  .table tr:hover td {
+      background-color: #f1f1f1;
+  }
+  .no-offers {
+      color: #dc3545; /* Red color for no offers message */
+      text-align: center;
+      font-weight: bold;
+  }
+</style>
+
+{% endif%}
+
+{% endblock %}

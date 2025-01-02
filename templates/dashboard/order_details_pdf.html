@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="bn">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jononi Management System - ক্যাশ মেমো </title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet"> 
+    <link rel="icon" href="{% static 'assets/images/hm.png' %}" type="image/png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        
+        body {
+            font-family: 'Noto Sans Bengali', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .invoice-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+        }
+        .header img {
+            max-width: 80px;
+        }
+        .header h1 {
+            font-size: 20px;
+            margin: 5px 0;
+            color: #007bff;
+        }
+        .header h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+        .header p {
+            font-size: 12px;
+            margin: 0;
+        }
+        .details {
+            margin: 15px 0;
+        }
+        .details table {
+            width: 100%;
+        }
+        .details th, .details td {
+            text-align: left;
+            padding: 5px;
+            font-size: 12px;
+        }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+        }
+        .product-table th {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            margin-top: 15px;
+            text-align: right;
+            font-size: 12px;
+        }
+        .footer .total {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .invoice-container {
+                page-break-inside: avoid;
+                height: auto;
+            }
+            .product-table {
+                page-break-inside: avoid;
+            }
+            .button-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container" id="invoice">
+        
+        <div class="header">
+            <img src="{% static 'assets/images/logo.png' %}" class="logo-icon" alt="লোগো আইকন" style="width: 210px; height: 170;">
+            <h1>জননী এগ্রো ইন্ডাস্ট্রিজ লি:</h1>
+            <h2>ক্যাশ মেমো</h2>
+            <p>চাউল, ডাল, আটা, ময়দা, চিনি, তেল, লবণ, দুধ, সুজি ইত্যাদি।</p>
+            <p>দোকান নং - ৫/১ & ৫/৩, কৃষি পণ্য পাইকারি বাজার, কুর্মিটোলা, ঢাকা।</p>
+            <p>মোবাইল: ০১৬১৪-১২৩০২০, ০১৭৫৯-০৯১০১৩</p>
+            <p class="total">তারিখ: {{ final_order.created_at }}</p>
+        </div>
+        
+        
+        <div class="details">
+            <table>
+                <tr>
+                    <th>নং:</th>
+                    <td>{{ final_order.id }}</td>
+                </tr>
+                <tr>
+                    <th>নাম:</th>
+                    <td>{{ final_order.shop.shop_name }}</td>
+                </tr>
+            </table>
+        </div>
+
+       
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>নং</th>
+                    <th>পণ্যের বিবরণ</th>
+                    <th>পরিমাণ</th>
+                    <th>দর (প্রতি কেজি)</th>
+                    <th>মোট টাকা</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in final_order.filtered_orders %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> 
+                    <td>{{ order.name.product_code }} --- {{ order.name.name }}</td>
+                    <td>{{ order.order_quantity }}</td>
+                    <td>{{ order.product_tp }}</td>
+                    <td>৳ {{ order.net_amount | floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align:right;">মোট:</td>
+                    <td>৳ {{ final_order.total_net_amount | floatformat:2 }} টাকা</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:right;">পরিশোধিত:</td>
+                    <td> {{ final_order.note_amount | floatformat:2 }} </td> 
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:right;">বাকি:</td>
+                    <td> {{ final_order.remaining_amount | floatformat:2 }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+
+        
+        <div class="footer">
+            <p>ক্রেতার স্বাক্ষর: ___________________________</p>
+            <p>বিক্রেতার স্বাক্ষর: ___________________________</p>
+        </div>
+    </div>
+
+    
+    <div class="button-container">
+        <button class="button" onclick="window.print()">প্রিন্ট ক্যাশ মেমো</button>
+        <button class="button" onclick="downloadPDF()">ডাউনলোড ক্যাশ মেমো</button>
+    </div>
+
+    <script>
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const invoice = document.getElementById("invoice");
+        
+            // Use html2canvas to capture the full content
+            const canvas = await html2canvas(invoice, {
+                scale: 3, // Higher scale for better quality
+                scrollY: -window.scrollY, // Ensure the entire content is captured
+            });
+        
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+        
+            // PDF dimensions
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+            // Image dimensions
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+        
+            // Calculate scaling ratio
+            const ratio = pdfWidth / imgWidth;
+            const scaledHeight = imgHeight * ratio;
+        
+            // Split the canvas into sections for multi-page rendering
+            let yOffset = 0;
+            while (yOffset < imgHeight) {
+                const sectionHeight = Math.min(imgHeight - yOffset, pdfHeight / ratio);
+                const sectionCanvas = document.createElement("canvas");
+                sectionCanvas.width = imgWidth;
+                sectionCanvas.height = sectionHeight;
+                const sectionCtx = sectionCanvas.getContext("2d");
+                sectionCtx.drawImage(
+                    canvas,
+                    0,
+                    yOffset,
+                    imgWidth,
+                    sectionHeight,
+                    0,
+                    0,
+                    imgWidth,
+                    sectionHeight
+                );
+                const sectionImgData = sectionCanvas.toDataURL("image/png");
+        
+                if (yOffset > 0) pdf.addPage();
+                pdf.addImage(sectionImgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        
+                yOffset += sectionHeight;
+            }
+        
+            // Save the PDF with a unique filename using the order ID
+            const orderId = "{{ final_order.id }}"; // Dynamically inject order ID
+            pdf.save(`cash_memo_${orderId}.pdf`);
+        }
+        
+    </script>
+</body>
+</html>

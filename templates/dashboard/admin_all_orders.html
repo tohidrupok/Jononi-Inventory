@@ -1,0 +1,208 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Add Product{% endblock %}
+{% load static %}
+
+{% block content %} 
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <h2 class="text-center mb-4">All Warehouse Sell Orders List</h2>
+
+        <table class="table table-hover table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Warehouse</th>
+                    <th scope="col">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for final_order in final_orders %}
+                <tr class="table-light">
+                    <td>#{{ final_order.id }}</td>     
+                    <td>{{ final_order.created_at }}</td>       
+                    <td>{{ final_order.shop.shop_name }}</td>
+                    <td>{{ final_order.customer }}</td>
+                    <td>
+                        <!-- Button to toggle details -->
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#orderDetails-{{ final_order.id }}">
+                            View Orders
+                        </button>
+                    </td>
+                </tr>
+                <!-- Hidden row to show order details -->
+                <tr class="collapse" id="orderDetails-{{ final_order.id }}">
+                    <td colspan="3" class="bg-light">
+                        <div class="order-details-container p-3">
+                            <h4>Order Details:</h4>
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th style="color: black;">Product Code & Name</th>
+                                        <th style="color: black;">Quantity</th>
+                                        <th style="color: black;">T.P</th>
+                                        <th style="color: black;">Net Amount</th>
+                                        <th style="color: black;">Discount</th>
+                                        <th style="color: black;">Gross Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    {% for order in final_order.orders.all %}
+                                    <tr class="{% if forloop.counter|divisibleby:2 %}table-light{% else %}table-info{% endif %}">
+                                        
+                                    
+                                        <td>{{ order.name.product_code }} --- {{ order.name.name }}</td>
+                                        <td>{{ order.order_quantity }}</td>
+                                        <td>{{ order.name.product_tp }}</td>
+                                        <td>{{ order.net_amount |floatformat:2}}</td>
+                                        <td>{{ order.discount_amount |floatformat:2}}</td>
+                                        <td>{{ order.gross_amount |floatformat:2}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>                                              
+                                                             
+                                    <tr style="background-color: blue; color:whitesmoke;">
+                                        
+                                        <td>Total: </td>
+                                        <td>{{ final_order.total_quantity }}</td>
+                                        <td></td>
+                                        <td>৳ {{ final_order.total_net_amount |floatformat:2}}</td>
+                                        <td>৳ {{ final_order.total_discount_amount |floatformat:2}}</td>
+                                        <td>৳ {{ final_order.total_gross_amount |floatformat:2}}</td>
+                                    </tr>                                         
+                                
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginator Section -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if final_orders.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ final_orders.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for page_num in final_orders.paginator.page_range %}
+                <li class="page-item {% if final_orders.number == page_num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if final_orders.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ final_orders.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Include Bootstrap CSS and JS for collapsible functionality -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <style>
+            /* Page title */
+            h2 {
+                font-family: 'Arial', sans-serif;
+                font-weight: bold;
+                color: #0056b3;
+            }
+
+            /* Table styles */
+            table {
+                background-color: #ffffff;
+            }
+
+            th, td {
+                text-align: center;
+            }
+
+            /* Enhanced table header styles */
+            thead th {
+                background-color: #343a40; /* Darker background */
+                color: #ffffff; /* White text for contrast */
+                font-weight: bold;
+                font-size: 1.1rem; /* Slightly larger font */
+                text-align: center; /* Center aligned */
+            }
+
+            tbody tr {
+                transition: background-color 0.3s ease;
+            }
+
+            tbody tr:hover {
+                background-color: #c5e9e0;
+            }
+
+            /* Button styles */
+            .btn-primary {
+                background-color: #007bff;
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #3c832d;
+            }
+
+            /* Order details section */
+            .order-details-container {
+                background-color: #f8f9fa;
+                border: 2px solid #3c832d;
+                border-radius: 5px;
+                animation: fadeIn 0.5s ease;
+            }
+
+            .table-sm th, .table-sm td {
+                padding: 0.4rem;
+            }
+
+            /* Animation for order details */
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            /* Mobile responsiveness */
+            @media (max-width: 768px) {
+                table {
+                    font-size: 0.9rem;
+                }
+
+                h2 {
+                    font-size: 1.5rem;
+                }
+            }
+        </style>
+    </div>
+</div>
+
+<br><br><br><br>
+
+{% endblock %}

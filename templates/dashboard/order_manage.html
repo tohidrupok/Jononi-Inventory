@@ -1,0 +1,342 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Add Product{% endblock %}
+{% load static %}
+
+{% block content %} 
+
+<div class="page-wrapper">
+    <div class="page-content"> 
+
+ <!--breadcrumb-->
+ <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">জননী এগ্রো</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Orders Profile</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                <a class="dropdown-item" href="javascript:;">Another action</a>
+                <a class="dropdown-item" href="javascript:;">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end breadcrumb-->   
+
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <strong>{{ message.tags|capfirst }}!</strong> {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+                
+            <table style="border-radius: 15px; border: 1px solid #ddd; overflow: hidden;" class="table table-hover table-bordered">
+
+            <thead style="background-color: #28a745; color: white;">
+                <tr>
+                    <th scope="col">নং</th>
+                    <th scope="col">বিস্তারিত</th>  
+                    <th scope="col">গ্রাহক</th>      
+                     
+                    <th scope="col">তা1</th>       
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for final_order in page_obj %}
+                <tr>
+                    <td>#{{ final_order.id }}</td>            
+                    
+                    
+                    <td>
+                        <a href="{% url 'generate_pdf' final_order.id %}" class="btn btn-primary"><i class="fas fa-receipt"></i></a>
+
+
+                        <!-- Button to toggle details -->
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="collapse" data-target="#orderDetails-{{ final_order.id }}">
+                            অর্ডার দেখুন
+                        </button>
+
+                       
+
+                    </td>
+                    <td>{{ final_order.shop.shop_name }}</td>
+                    <td>{{ final_order.created_at }}</td>            
+                   
+
+                </tr>
+                <!-- Hidden row to show order details -->
+                <tr class="collapse" id="orderDetails-{{ final_order.id }}">
+                    <td colspan="5">
+                        <div class="order-details-container p-4">
+                            <h4 style="color: rgb(94, 11, 0);">"এই অর্ডারটি {{ final_order.shop.shop_name }}, {{ final_order.shop.zone.thana}}, {{ final_order.shop.zone.area}} জন্য। </h4>
+                            <h5 style="color: #28a745;">অর্ডার করেছেন: {{ final_order.customer }} গুদাম থেকে</h5>
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                                                                                                  
+                                        <th style="color: rgb(3, 0, 199);">পণ্য কোড ও নাম</th>
+                                        <th style="color: rgb(3, 0, 199);">টি.পি দাম</th>
+                                        <th style="color: rgb(3, 0, 199);">
+                                            <i class="fa fa-cubes" aria-hidden="true"></i> 
+                                        </th>                                                                       
+                                        <th style="color: rgb(3, 0, 199);">মোট পরিমাণ</th>
+                                        <th style="color: rgb(3, 0, 199);">
+                                            <i class="fa fa-tasks" aria-hidden="true"></i> 
+                                        </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    {% for order in final_order.filtered_orders %}
+                                    <tr class="{% if forloop.counter|divisibleby:2 %}table-light{% else %}table-info{% endif %}">
+                                        
+                                        <td>{{ order.name.product_code }} --- {{ order.name.name }}</td>
+                                                                                    
+                                        <td>৳ {{ order.product_tp }}</td>
+                                        <td>{{ order.order_quantity }}</td>
+                                        <td>৳ {{ order.net_amount | floatformat:2 }}</td>
+                                        
+                                        <td>
+                                            {% if order.status == "Delivered" %}
+                                                   <span class="badge  btn btn-danger btn-sm">ডেলিভারি </span>                                                 
+                                            {% else %}
+                                                   <a href="{% url 'confirm_product' order.id %}" class="btn btn-success btn-sm">নিশ্চিত </a>
+                                                   <a href="{% url 'edit_order' order.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit" style="color: rgb(242, 242, 245); font-size: 12px;"></i></a>
+                                                   <a href="{% url 'delete_order' order.id %}" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt" style="color: rgb(248, 247, 247); font-size: 12px;"></i></a>
+                                            {% endif %}
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>                                              
+                                <tr style="background-color: #2d3e50; color:white;">
+                                    
+                                  
+                                    <td>{%if final_order.note_amount %}
+                                        <a href="{% url 'note' final_order.id %}" class="btn btn-sm btn-success">গ্রহণকৃত অর্থ: {{ final_order.note_amount}} BDT</a>
+                                        {% else%}
+                                        <a href="{% url 'note' final_order.id %}" class="btn btn-sm btn-warning">পেমেন্ট</a>
+                                        {%endif%}
+                                    </td>
+                                    <td>Total: </td>
+                                   
+                                    <td>{{ final_order.total_quantity }}</td>
+                                    <td>৳ {{ final_order.total_net_amount | floatformat:2 }}</td>
+                                    <td>
+                                        {%if final_order.expense_Amount %}
+                                        <a href="{% url 'cost' final_order.id %}" class="btn btn-sm btn-success">পরিবহন খরচ: {{ final_order.expense_Amount}} BDT</a>
+                                        {% else%}
+                                        <a href="{% url 'cost' final_order.id %}" class="btn btn-sm btn-warning">পরিবহন খরচ</a>
+                                        {%endif%}
+                                    </td>
+                                </tr> 
+                            </table>
+                        </div>
+                    </td>
+                </tr> 
+                {% endfor %}
+            </tbody>
+        </table> 
+        <!-- Existing code above remains the same -->
+
+<!-- Pagination controls -->
+<div class="pagination-container text-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Previous Page Link -->
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;&laquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+            
+            <!-- Page Number Links -->
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Next Page Link -->
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;&raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<!-- Existing code below remains the same -->
+
+
+        <!-- Include Bootstrap CSS and JS for collapsible functionality -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <style>
+            /* Page title */
+            h2 {
+                font-family: 'Arial', sans-serif;
+                font-weight: bold;
+                color: #1e3d58;
+                margin-bottom: 30px;
+            }
+
+            /* Table styles */
+            table {
+                background-color: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }
+
+            th, td {
+                text-align: center;
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            /* Enhanced table header styles */
+            thead th {
+                background-color: #343a40; /* Darker background */
+                color: #ffffff; /* White text for contrast */
+                font-weight: bold;
+                font-size: 1.1rem;
+                text-align: center;
+            }
+      
+            tbody tr {
+                transition: background-color 0.3s ease;
+            }
+
+            tbody tr:hover {
+                background-color: #e6f7ff;
+            }
+
+            /* Button styles */
+            .btn-info {
+                background-color: #17a2b8;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                padding: 10px 20px;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-info:hover {
+                background-color: #138496;
+            }
+
+            /* Order details section */
+            .order-details-container {
+                background-color: #f1f1f1;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                border: 1px solid #ccc;
+                margin-top: 20px;
+            }
+
+            .table-sm th, .table-sm td {
+                padding: 10px;
+            }
+
+            /* Responsive styles */
+            @media (max-width: 768px) {
+                table {
+                    font-size: 0.9rem;
+                    margin-bottom: 20px;
+                }
+
+                h2 {
+                    font-size: 1.5rem;
+                    margin-bottom: 15px;
+                }
+
+                .btn-info {
+                    padding: 8px 16px;
+                    font-size: 0.9rem;
+                }
+
+                .order-details-container {
+                    padding: 15px;
+                }
+            } 
+
+            /* lupping animation */
+            @keyframes fadeIn {
+                to {
+                    opacity: 1;
+                }
+                }
+                
+                @keyframes popIn {
+                0% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.2);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                }
+        </style>
+    </div>
+</div>
+
+{% endblock %}
+
+

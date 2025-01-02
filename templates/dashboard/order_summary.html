@@ -1,0 +1,138 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Add Product{% endblock %}
+{% load static %}
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Order Summary</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head> 
+
+{% block content %} 
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Dealership</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ms-auto">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Settings</button>
+                    <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                        <a class="dropdown-item" href="javascript:;">Another action</a>
+                        <a class="dropdown-item" href="javascript:;">Something else here</a>
+                        <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+      
+        <div class="container mt-4">
+            <h1 class="text-center mb-4">My Sell Summary</h1>
+            
+            <!-- Date Filter Form -->
+            <form method="get" class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ start_date }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ end_date }}">
+                </div>
+                <div class="col-md-4 align-self-end">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+            
+            <!-- Order Table -->
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Shop</th>
+                        <th>Warehouse</th>
+                        <th>Date Created</th>
+                        <th>Net Amount</th>
+                        <th>Receive Amount</th>
+                        <th>Outcome </th>
+                        <th>Carrying Cost</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders_data %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.shop }}</td>
+                        <td>{{ order.sr }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.net_amount|floatformat:2 }}</td>
+                        <td>{{ order.note_amount|floatformat:2 }}</td>
+                        <td>{{ order.total |floatformat:2}}</td>
+                        <td>{{ order.expense_Amount|floatformat:2 }}</td>
+                       
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Summary Section -->
+<div class="mt-4 p-4 bg-light border rounded shadow-lg">
+    <h2 class="text-center mb-4 text-dark">Summary</h2>
+    <div class="row text-center">
+        <!-- Total Gross -->
+        <div class="col-md-3">
+            <div class="p-4 bg-dark text-white rounded-lg shadow-sm">
+                <h5 class="font-weight-bold text-white">Total Net</h5>
+                <h2 class="font-weight-bold display-4 text-white">{{ total_net|floatformat:2 }} BDT</h2>
+            </div>
+        </div>
+        <!-- Total Receive Money -->
+        <div class="col-md-3">
+            <div class="p-4 bg-info text-white rounded-lg shadow-sm">
+                <h5 class="font-weight-bold text-white">Total Receive Money</h5>
+                <h2 class="font-weight-bold display-4 text-white">{{ total_note|floatformat:2 }} BDT</h2>
+            </div>
+        </div>
+        <!-- Overall Total Extra Amount -->
+        <div class="col-md-3">
+            <div class="p-4 bg-success text-white rounded-lg shadow-sm">
+                <h5 class="font-weight-bold text-white">Total Outcome Amount</h5>
+                <h2 class="font-weight-bold display-4 text-white">{{ overall_total|floatformat:2 }} BDT</h2>
+            </div>
+        </div> 
+        <br>
+
+        <!-- Overall Total Eexpense Amount-->
+        <div class="col-md-3">
+            <div class="p-4 bg-danger text-white rounded-lg shadow-sm">
+                <h5 class="font-weight-bold text-white">Total Carrying Cost</h5>
+                <h2 class="font-weight-bold display-4 text-white">{{ total_expense_Amount|floatformat:2 }} BDT</h2>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
+
+    </div>
+</div>
+
+{% endblock %} 

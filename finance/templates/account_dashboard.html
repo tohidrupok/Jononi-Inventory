@@ -1,0 +1,24 @@
+<h1>Account Dashboard</h1>
+<p>Balance: {{ account.balance }}</p>
+
+<h2>Recent Transactions</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.transaction_date }}</td>
+            <td>{{ transaction.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

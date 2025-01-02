@@ -1,0 +1,159 @@
+{% extends 'partials/base0.html' %}
+{% block title %}All Dealers Demand List{% endblock %}
+{% load static %}
+
+{% block content %} 
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <h2 class="text-center mb-4">All Warehouse Demand List</h2>
+
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="alert-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message.tags|capfirst }}!</strong> {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <table class="table table-hover table-striped table-bordered shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="color: white;" scope="col">ID</th>
+                    <th style="color: white;" scope="col">Date</th>
+                    <th style="color: white;" scope="col">Warehouse</th>
+                    <th style="color: white;" scope="col">Details</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for final_order in final_orders %}
+                <tr class="table-light">
+                    <td>#{{ final_order.id }}</td>
+                    {% comment %} <td class="font-weight-bold {% if final_order.status == 'Delivered' %}text-success{% else %}text-success{% endif %}">{{ final_order.status }}</td> {% endcomment %}
+                    <td>{{ final_order.created_at|date:"M d, Y h:i A" }}</td>
+                    <td>{{ final_order.dealer }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="collapse" data-target="#orderDetails-{{ final_order.id }}">
+                            View Orders <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Hidden row to show order details -->
+                <tr class="collapse" id="orderDetails-{{ final_order.id }}">
+                    <td colspan="5" class="bg-light">
+                        <div class="order-details-container p-4">
+                            <h4>Order Details</h4>
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr>                                      
+                                        <th>Status</th>                             
+                                        <th>Product Code & Name</th>
+                                        <th>Qnt</th>                                      
+                                        <th>DP Price</th>
+                                        <th>Net Amount</th>
+                                        <th>Gross Amount</th>
+                                        <th>Admin Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    {% for order in final_order.products.all %}
+                                    <tr class="{% if forloop.counter|divisibleby:2 %}table-light{% else %}table-info{% endif %}">
+                                        
+                                        <td class="{% if order.status == 'Received' %}text-success{% else %}text-danger{% endif %}">{{ order.status }}</td>
+                                        <td>{{ order.product.product_code }} - {{ order.product.name }}</td>
+                                        <td>{{ order.demand_quantity }}</td>
+                                        <td>{{ order.product.product_dp|floatformat:2 }}</td>
+                                        <td>{{ order.net_amount|floatformat:2 }}</td>
+                                        <td>{{ order.gross_amount|floatformat:2 }}</td>
+                                        <td>
+                                            {% if order.admin_flag == False %}                                           
+                                                {% if order.status == "Pending" %}
+                                                   <a href="{% url 'delivery_done' order.id %}" class="btn btn-success btn-sm">Mark as Delivered</a>
+                                                   <a href="{% url 'admin_edit_demand' order.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit" style="color: rgb(242, 242, 245); font-size: 12px;"></i></a>
+                                                {% else %}
+                                                    <span class="badge  btn btn-success btn-sm">Pending..</span>
+                                                {% endif %}
+                                            {% elif order.admin_flag == True %}
+                                                <span class="badge bg-danger">Delivered</span>
+                                            {%else%}
+                                            <h1>error</h1>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot class="font-weight-bold">
+                                    <tr style="color: black; font-weight: bold;"  class="table-primary">
+                                        
+                                        <td ></td>
+                                        <td >Total</td>
+                                        <td>{{ final_order.total_quantity }}</td>
+                                        <td>৳ {{ final_order.total_amount|floatformat:2 }}</td>
+                                        <td>৳ {{ final_order.total_net_amount|floatformat:2 }}</td>
+                                        <td>৳ {{ final_order.total_gross_amount|floatformat:2 }}</td>
+                                        <td></td>
+                                        
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+        
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+ 
+        
+        <!-- Include Bootstrap CSS and JS for collapsible functionality -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For icons -->
+
+    </div>
+</div>
+
+{% endblock %}

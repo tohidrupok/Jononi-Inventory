@@ -1,0 +1,93 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Active Offers{% endblock %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Start page wrapper -->
+<div class="page-wrapper d-flex align-items-center justify-content-center" style="min-height: 80vh; background-color: #e9ecef;">
+    <div class="container">
+        <h2 class="mb-4 text-center text-primary">Jononi Employee Profiles</h2>
+        
+        <h3 class="text-success">Today Active Employees</h3>
+        <div class="row">
+            {% for customer in active_customers %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-success">
+                    <div class="card-body text-center">
+                        <div class="d-flex justify-content-center mb-3">
+                            <img class="img-fluid img-thumbnail rounded-circle shadow-sm" 
+                                 src="{{ customer.profile.image.url }}" 
+                                 alt="profile-image" 
+                                 style="max-width: 120px; height: auto;">
+                        </div>
+                        <h5 class="card-title text-success">{{ customer.profile.title }} - {{ customer.username }}</h5>
+                        <p class="card-text">
+                            <strong>Last Login:</strong> <span class="text-secondary">{{ customer.last_login }}</span>
+                        </p>
+                        <a class="btn btn-success" href="{% url 'dashboard-customer-detail' customer.id %}">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">Active</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h3 class="text-danger mt-5">Today Inactive Employees</h3>
+        <div class="row">
+            {% for customer in inactive_customers %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-body text-center">
+                        <div class="d-flex justify-content-center mb-3">
+                            <img class="img-fluid img-thumbnail rounded-circle shadow-sm" 
+                                 src="{{ customer.profile.image.url }}" 
+                                 alt="profile-image" 
+                                 style="max-width: 120px; height: auto;">
+                        </div>
+                        <h5 class="card-title text-danger">{{ customer.profile.title }} - {{ customer.username }}</h5>
+                        <p class="card-text">
+
+                            <strong>Last Login:</strong> <span class="text-secondary">{{ customer.last_login }}</span>
+                        </p>
+                        <a class="btn btn-danger" href="{% url 'dashboard-customer-detail' customer.id %}">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">Inactive</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .page-wrapper {
+        background-color: #e9ecef;
+    }
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s;
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+    .badge {
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

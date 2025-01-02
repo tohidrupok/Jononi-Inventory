@@ -1,0 +1,113 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Active Offers{% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+
+<div class="page-wrapper">
+    <div class="page-content"> 
+
+ <!--breadcrumb-->
+ <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Jononi Agro Industries Ltd.</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Active Offer Now</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                <a class="dropdown-item" href="javascript:;">Another action</a>
+                <a class="dropdown-item" href="javascript:;">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end breadcrumb-->  
+
+<!--start page wrapper -->
+
+        <head>
+            
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                }
+                .container {
+                    margin-top: 50px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                }
+                h1 {
+                    color: #28a745; /* Green color for the title */
+                    margin-bottom: 20px;
+                }
+                .table {
+                    border-collapse: separate;
+                    border-spacing: 0 10px;
+                }
+                .table th {
+                    background-color: #28a745; /* Green header */
+                    color: white;
+                }
+                .table td {
+                    background-color: #ffffff;
+                    border: 1px solid #dee2e6;
+                }
+                .table tr:hover td {
+                    background-color: #f1f1f1;
+                }
+                .no-offers {
+                    color: #dc3545; /* Red color for no offers message */
+                    text-align: center;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Active Offers</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product & Code</th>
+                            <th>Discount (%)</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for offer in offers %}
+                        <tr>
+                            <td>{{ offer.product.name }} -- {{ offer.product.product_code }}</td>
+                            <td>{{ offer.discount_percentage }}%</td>
+                            <td>{{ offer.start_date }}</td>
+                            <td>{{ offer.end_date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="no-offers">No active offers available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </body>
+    </div>
+</div> 
+
+
+{% endblock %}

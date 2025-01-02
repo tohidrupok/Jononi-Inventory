@@ -1,0 +1,536 @@
+{% load crispy_forms_tags %}
+
+<div class="page-wrapper">
+    <div class="page-content"> 
+
+ <!--breadcrumb-->
+ <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Jononi Agro Industries Ltd.</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Place New Order</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                <a class="dropdown-item" href="javascript:;">Another action</a>
+                <a class="dropdown-item" href="javascript:;">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end breadcrumb--> 
+
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-12">
+        <!-- Button to toggle form visibility -->
+        <button type="button" id="toggleFormButton" class="btn btn-toggle"
+        style="display: flex; 
+               align-items: center; 
+               gap: 10px; 
+               background-color: #3498db; 
+               border: none; 
+               color: white; 
+               font-size: 16px; 
+               font-weight: 600; 
+               padding: 12px 25px; 
+               border-radius: 30px; 
+               text-transform: uppercase; 
+               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+               transition: background-color 0.3s, transform 0.2s;">
+    <span style="font-size: 1.2rem;">&#128269;</span> <!-- Magnifying glass icon -->
+    এরিয়া খুঁজে বের করুন
+</button>
+
+
+
+
+
+        <!-- The form to toggle -->
+        <form method="GET" action="{% url 'dashboard-index' %}" class="mb-4" id="searchForm" style="display: none;">
+            <div class="row">
+                <!-- Cascading Dropdowns -->
+                 
+                <div class="col-12 col-md-3 mb-2">
+                    <br>
+                    <select name="zone_name" class="form-control">
+                        <option value="">Select Zone</option>
+                        {% for zone in zones %}
+                            <option value="{{ zone.name }}">{{ zone.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3 mb-2">
+                    <br>
+                    <select name="zone_district" class="form-control">
+                        <option value="">Select District</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3 mb-2">
+                    <br>
+                    <select name="zone_thana" class="form-control">
+                        <option value="">Select Thana</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3 mb-2">
+                    <br>
+                    <select name="zone_area" class="form-control">
+                        <option value="">Select Area</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <script>
+            // JavaScript to toggle the visibility of the form
+            document.getElementById('toggleFormButton').addEventListener('click', function() {
+                var form = document.getElementById('searchForm');
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                    this.textContent = 'Hide Search Form'; // Change button text to "Hide Search Form"
+                } else {
+                    form.style.display = 'none';
+                    this.textContent = 'Show Search Form'; // Change button text back to "Show Search Form"
+                }
+            });
+        </script>
+
+        {% if shops %}
+            <h4 class="heading-primary">একটি দোকান নির্বাচন করুন</h4>
+            <form method="POST">
+                {% csrf_token %}
+            
+                <!-- Shop selection dropdown -->
+                <select name="selected_shop" class="form-control mb-2">
+                    <option value="">Select Shop</option>
+                    {% for shop in shops %}
+                        <option value="{{ shop.id }}" {% if selected_shop and selected_shop.id == shop.id %}selected{% endif %}>
+                            {{ shop.shop_name }} - {{ shop.shop_owner }}
+                        </option>
+                    {% endfor %}
+                </select>
+            
+                <!-- Management form for formset -->
+                {{ formset.management_form }}
+                
+                <!-- Product form container -->
+                <div id="product-form-container">
+                    {% for form in formset %}
+                        <div class="form-row product-form">
+                            {{ form|crispy }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <br>
+                <button style="background-color: #0dcaf0;" type="button" id="add-product-btn" class="btn btn-accent">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+                
+                <br><hr>
+                <input class="btn btn-info btn-block mb-2" type="submit" value="Place Order">
+                <hr>
+                                    
+            </form>
+
+            <style>
+                /* General Styling */
+                body {
+                    background-color: #f7f7f7; /* Light grey background */
+                    font-family: 'Arial', sans-serif;
+                    color: #333;
+                }
+
+                .container {
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                    margin-top: 30px;
+                }
+
+                .row {
+                    margin-top: 20px;
+                }
+
+                h2, h3, h4 {
+                    color: #4b79a1; /* Soft blue */
+                    font-weight: bold;
+                }
+
+                /* Button Styling */
+                .btn-toggle {
+                    background-color: #f5a623; /* Vibrant orange */
+                    color: white;
+                    border-radius: 5px;
+                    padding: 8px 20px;
+                    font-size: 1.1rem;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                    margin-bottom: 20px;
+                }
+
+                .btn-toggle:hover {
+                    background-color: #d87c12;
+                    transform: scale(1.05);
+                }
+
+                .btn-primary {
+                    background-color: #4b79a1; /* Blue */
+                    color: white;
+                    border-radius: 5px;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                }
+
+                .btn-primary:hover {
+                    background-color: #2c5282;
+                    transform: scale(1.05);
+                }
+
+                .btn-accent {
+                    background-color: #9b51e0; /* Purple */
+                    color: white;
+                    border-radius: 5px;
+                    padding: 8px 20px;
+                    font-size: 1.1rem;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                }
+
+                .btn-accent:hover {
+                    background-color: #7a36c9;
+                    transform: scale(1.05);
+                }
+
+                .btn-info {
+                    background-color: #1bc2a7; /* Light green */
+                    color: white;
+                    border-radius: 5px;
+                    padding: 8px 20px;
+                    font-size: 1.1rem;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                }
+
+                .btn-info:hover {
+                    background-color: #16a085;
+                    transform: scale(1.05);
+                }
+
+                .btn-block {
+                    width: 100%;
+                }
+
+                .mb-2 {
+                    margin-bottom: 1rem;
+                }
+
+                /* Input Fields Styling */
+                .form-control {
+                    border-radius: 5px;
+                    border: 1px solid #ddd;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                    transition: border-color 0.3s ease;
+                    background-color: #f9f9f9;
+                }
+
+                .form-control:focus {
+                    border-color: #4b79a1;
+                    box-shadow: 0 0 5px rgba(75, 121, 161, 0.5);
+                }
+
+                select.form-control {
+                    background-color: #fff;
+                }
+
+                /* Table Styling */
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                table th {
+                    background-color: #4b79a1;
+                    color: white;
+                    font-weight: bold;
+                }
+
+                table td, table th {
+                    padding: 12px 15px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                }
+
+                table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
+
+                /* Form Section */
+                .form-row.product-form {
+                    background-color: #f9f9f9;
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
+                    transition: background-color 0.3s ease;
+                }
+
+                .form-row.product-form:hover {
+                    background-color: #e9ecef;
+                }
+
+                .form-row.product-form input,
+                .form-row.product-form select {
+                    margin-bottom: 10px;
+                }
+
+                .form-row.product-form button {
+                    background-color: #9b51e0;
+                    color: white;
+                    padding: 5px 15px;
+                    border-radius: 5px;
+                }
+
+                .form-row.product-form button:hover {
+                    background-color: #7a36c9;
+                    transform: scale(1.05);
+                }
+
+                /* Success Table Heading */
+                .table-success th,
+                .table-success td {
+                    background-color: #1bc2a7; /* Light green */
+                    color: white;
+                }
+
+                /* Animated Text Styling */
+                .animated-text {
+                    color: #e74c3c; /* Red */
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    animation: fadeIn 2s ease-in-out;
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                } 
+                #toggleFormButton {
+                    background-color: #3498db; 
+                    border-radius: 25px; 
+                    color: white;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    transition: background-color 0.3s, transform 0.2s;
+                }
+
+                #toggleFormButton:hover {
+                    background-color: #2980b9; 
+                    transform: translateY(-2px); 
+                }
+
+                #toggleFormButton:active {
+                    background-color: #1c5980; 
+                    transform: translateY(0); 
+                }
+                            </style>               
+
+            <!-- JavaScript to dynamically add forms -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var formContainer = document.getElementById('product-form-container');
+                    var addProductBtn = document.getElementById('add-product-btn');
+                    var totalForms = document.getElementById('id_form-TOTAL_FORMS');  // Management form field for total forms
+                    var formNum = formContainer.getElementsByClassName('product-form').length - 1;
+            
+                    addProductBtn.addEventListener('click', function() {
+                        formNum++;  // Increment form number
+                        var newForm = formContainer.firstElementChild.cloneNode(true);  // Clone the first product form
+                        var formRegex = new RegExp('form-(\\d+)', 'g');
+                        
+                        // Update all form inputs with the new number
+                        newForm.innerHTML = newForm.innerHTML.replace(formRegex, 'form-' + formNum);
+                        formContainer.appendChild(newForm);
+                        totalForms.value = formNum + 1;  // Update management form total forms
+                    });
+                });
+            </script>
+            
+        {% endif %}
+
+
+        {% if shop_orders.exists %}
+        <hr>
+        <h3 class="heading-secondary" style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 1.5rem; color: #f44336;">📌</span> This Orders for:</h3>
+        <h4 class="animated-text" style="font-size:24px; color:#fff; text-align:center; background: linear-gradient(90deg, #ff8c00, #ff4d4d); padding:20px 30px; border-radius:10px; display:inline-flex; align-items:center; gap:15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); animation:fadeInUp 2s ease-in-out;">🛒 <span>{{ selected_shop.shop_name }}, {{ selected_shop.zone.area }}, {{ selected_shop.zone.thana }}</span></h4>
+                
+        <!-- Date Picker for Selecting Specific Day -->
+        <form method="GET" action="{% url 'dashboard-index' %}" class="mb-4">
+            {% csrf_token %}
+            <div class="row mb-2">
+                <div class="col-12 col-md-3">
+                    <!-- Date Picker -->
+                    <input type="date" name="selected_date" class="form-control" value="{{ selected_date|date:'Y-m-d' }}">
+                </div>
+                <div class="col-12 col-md-3">
+                    <button type="submit" class="btn btn-primary">Filter by Date</button>
+                </div>
+            </div>
+        </form>
+    
+        <table class="table bg-white table-responsive">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th scope="col">Order By</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Net Amount</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Gross Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in shop_orders %}
+                    <tr>
+                        <td>{{ order.customer }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.name.name }}</td>
+                        <td>{{ order.name.product_tp }}</td>
+                        <td>{{ order.order_quantity }}</td>
+                        <td>{{ order.net_amount|floatformat:2 }}</td>
+                        <td>{{ order.discount_amount | floatformat:2 }}</td>
+                        <td>{{ order.gross_amount | floatformat:2 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <thead class="bg-success text-white">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                    <th scope="col">{{ total_quantity }}</th>
+                    <th scope="col">৳ {{ total_net_amount }}</th>
+                    <td>৳ {{ total_discount_amount | floatformat:2 }}</td>
+                    <th scope="col">৳ {{ total_gross_amount | floatformat:2 }}</th>
+                </tr>
+            </thead>
+        </table>
+        <br><br>
+    {% else %}
+    <br> <hr>
+    <h4 class="animated-text" style="font-size:24px; color:#fff; text-align:center; background: linear-gradient(90deg, #ff8c00, #ff4d4d); padding:20px 30px; border-radius:10px; display:inline-flex; align-items:center; gap:15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); animation:fadeInUp 2s ease-in-out;">🛒 <span>কোন দোকানের তথ্য খুঁজে পাওয়া যায় নি, নতুন অর্ডার দেওয়ার জন্য একটি দোকান বেছে নিন।</span></h4>
+
+    <style>
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    </style>
+    
+    {% endif %}
+                    
+    </div>
+    
+</div>
+</div>
+</div>
+</div>
+<br><br><br><br>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const zoneDropdown = document.querySelector("select[name='zone_name']");
+        const districtDropdown = document.querySelector("select[name='zone_district']");
+        const thanaDropdown = document.querySelector("select[name='zone_thana']");
+        const areaDropdown = document.querySelector("select[name='zone_area']");
+
+        // When a zone is selected, get districts
+        zoneDropdown.addEventListener("change", function () {
+            const zoneName = zoneDropdown.value;
+            if (zoneName) {
+                fetch(`/get-districts/?zone_name=${zoneName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        districtDropdown.innerHTML = '<option value="">Select District</option>';
+                        thanaDropdown.innerHTML = '<option value="">Select Thana</option>';
+                        areaDropdown.innerHTML = '<option value="">Select Area</option>';
+
+                        data.districts.forEach(district => {
+                            districtDropdown.innerHTML += `<option value="${district}">${district}</option>`;
+                        });
+                    });
+            } else {
+                districtDropdown.innerHTML = '<option value="">Select District</option>';
+                thanaDropdown.innerHTML = '<option value="">Select Thana</option>';
+                areaDropdown.innerHTML = '<option value="">Select Area</option>';
+            }
+        });
+
+        // When a district is selected, get thanas
+        districtDropdown.addEventListener("change", function () {
+            const districtName = districtDropdown.value;
+            if (districtName) {
+                fetch(`/get-thanas/?district_name=${districtName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        thanaDropdown.innerHTML = '<option value="">Select Thana</option>';
+                        areaDropdown.innerHTML = '<option value="">Select Area</option>';
+
+                        data.thanas.forEach(thana => {
+                            thanaDropdown.innerHTML += `<option value="${thana}">${thana}</option>`;
+                        });
+                    });
+            } else {
+                thanaDropdown.innerHTML = '<option value="">Select Thana</option>';
+                areaDropdown.innerHTML = '<option value="">Select Area</option>';
+            }
+        });
+
+        // When a thana is selected, get areas
+        thanaDropdown.addEventListener("change", function () {
+            const thanaName = thanaDropdown.value;
+            if (thanaName) {
+                fetch(`/get-areas/?thana_name=${thanaName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        areaDropdown.innerHTML = '<option value="">Select Area</option>';
+
+                        data.areas.forEach(area => {
+                            areaDropdown.innerHTML += `<option value="${area}">${area}</option>`;
+                        });
+                    });
+            } else {
+                areaDropdown.innerHTML = '<option value="">Select Area</option>';
+            }
+        });
+    }); 
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>

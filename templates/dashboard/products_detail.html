@@ -1,0 +1,25 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Active Offers{% endblock %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!--start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">   
+
+        <div class="row my-4">
+            <div class="col-md-6 offset-md-3 p-3 bg-white">
+                <h3>Order {{ objects.name }}</h3>
+                <hr>
+                <form>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input class="btn btn-info" type="submit" value="Make Order">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

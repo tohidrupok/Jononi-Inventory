@@ -1,0 +1,135 @@
+
+{% extends 'partials/base0.html' %}
+{% block title %}Transaction History{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <!-- Breadcrumb -->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-4">
+            <div class="breadcrumb-title pe-3 text-muted">Finance and Accounting Division</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:;" class="text-primary"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active text-secondary" aria-current="page">History</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- End Breadcrumb -->
+        
+        <!-- Page Heading -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-4 text-primary">Financial Report</h1>
+            {% comment %} <button class="btn btn-outline-primary"><i class="bx bx-download"></i> Export</button> {% endcomment %}
+        </div>
+        
+        <div class="container finance-summary-container">
+          <h1 class="text-center mb-4">Finance Summary</h1>
+  
+          <div class="row">
+              <!-- Credit Cards -->
+              <div class="col-md-6">
+                  <div class="card">
+                      <div class="card-header">
+                        Total Credits
+                      </div>
+                      <div class="card-body">
+                          <ul class="list-unstyled">
+                              <li>
+                                  <strong>Total Loan from Bank:</strong> 
+                                  <span class="total-amount amount-value">{{ loan_bank }} BDT</span>
+                              </li>
+                              <li>
+                                  <strong>Total Own Investment:</strong>
+                                  <span class="total-amount amount-value">{{ own_investment }} BDT</span>
+                              </li>
+                              <li>
+                                  <strong>Total Order Price:</strong>
+                                  <span class="total-amount amount-value">{{ order_price }} BDT</span>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+  
+              <!-- Debit Cards -->
+              <div class="col-md-6">
+                  <div class="card">
+                      <div class="card-header">
+                        Total Debits
+                      </div>
+                      <div class="card-body">
+                          <ul class="list-unstyled">
+                              <li>
+                                  <strong>Total Cashout:</strong> 
+                                  <span class="total-amount amount-value">{{ cashout }} BDT</span>
+                              </li>
+                              <li>
+                                  <strong>Total Office Cost:</strong>
+                                  <span class="total-amount amount-value">{{ office_cost }} BDT</span>
+                              </li>
+                              <li>
+                                  <strong>Total Factory Demand Cash:</strong>
+                                  <span class="total-amount amount-value">{{ factory_demand }} BDT</span>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+  
+          {% if is_finance %}
+          <div class="finance-message">
+              <p>You have access to finance-related information. Please review the summary above for details.</p>
+          </div>
+          {% endif %}
+      </div>
+  
+      <!-- Bootstrap JS (Optional for interactivity) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> 
+
+
+    </div>
+</div>
+
+<style>
+  .finance-summary-container {
+      margin-top: 30px;
+  }
+  .card {
+      margin-bottom: 20px;
+  }
+  .card-header {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+  }
+  .card-body {
+      background-color: #f9f9f9;
+  }
+  .total-amount {
+      font-size: 1.5rem;
+      font-weight: bold;
+  }
+  .amount-value {
+      color: #28a745;
+  }
+  .finance-message {
+      font-size: 1.2rem;
+      background-color: #d4edda;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #c3e6cb;
+      margin-top: 20px;
+  }
+</style>
+{% endblock %}
+
+
+

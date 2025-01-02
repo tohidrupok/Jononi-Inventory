@@ -1,0 +1,104 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Add Product{% endblock %}
+{% load static %}
+ 
+
+{% block content %} 
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Dealership</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ms-auto">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Settings</button>
+                    <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                        <a class="dropdown-item" href="javascript:;">Another action</a>
+                        <a class="dropdown-item" href="javascript:;">Something else here</a>
+                        <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+      
+        <div class="card">
+            <div class="card-body">
+                <div class="d-lg-flex align-items-center mb-4 gap-3">
+                    <div class="position-relative">
+                        <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order"> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+                    </div>
+                  
+                </div>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+                    <p style="font-size: 1.2em; color: #444; max-width: 800px; margin: 0 auto; line-height: 1.6; font-family: Arial, sans-serif;">
+                        This order take SR's from the shop, enabling dealers to manage deliveries by their fixed locations.
+                    </p>
+                </div>
+                
+                
+                
+                <div class="table-responsive">
+                    {% if orders %}
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order#</th>
+                                <th>Product Name & code</th>
+                                <th>Quantity</th>
+                                <th>Shop</th>
+                                <th>Thana</th>
+                                <th>Area</th>
+                                <th>Date </th>
+                                <th>SR </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
+                                        </div>
+                                        <div class="ms-2">
+                                            <h6 class="mb-0 font-14">#{{ order.id }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ order.name.name }} - {{ order.name.product_code }}</td>
+                                <td>{{ order.order_quantity }}</td>
+                                <td>{{ order.shop.shop_name }}</td>
+                                <td>{{ order.shop.zone.thana }}</td>
+                                <td>{{ order.shop.zone.area }}</td>
+                                <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                                <td>{{ order.customer.username }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No orders found for your selected products and zones.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Add Product{% endblock %}
+{% load static %}
+
+
+{% block content %} 
+<div class="page-wrapper">
+    <div class="page-content">
+        
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.id %}Edit Offer{% else %}Create Offer{% endif %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>{% if form.instance.id %}Edit Offer{% else %}Create Offer{% endif %}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_product">{{ form.product.label }}</label>
+                {{ form.product }}  <!-- No filter needed here -->
+            </div>
+            <div class="form-group">
+                <label for="id_discount_percentage">{{ form.discount_percentage.label }}</label>
+                {{ form.discount_percentage }}  <!-- No filter needed here -->
+            </div>
+            <div class="form-group">
+                <label for="id_start_date">{{ form.start_date.label }}</label>
+                {{ form.start_date }}  <!-- No filter needed here -->
+            </div>
+            <div class="form-group">
+                <label for="id_end_date">{{ form.end_date.label }}</label>
+                {{ form.end_date }}  <!-- No filter needed here -->
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+        <a href="{% url 'offer_list' %}" class="btn btn-secondary mt-3">Back to offers</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        $(document).ready(function(){
+            // Initialize Flatpickr for date and time fields
+            flatpickr(".datetimepicker", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                minuteIncrement: 15 // Set increment for minute selection
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+</div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- favicon -->
+	<link rel="icon" href="{% static 'assets/images/hm.png' %}" type="image/png" />
+	<!-- plugins -->
+	<link href="{% static 'assets/plugins/vectormap/jquery-jvectormap-2.0.2.css' %}" rel="stylesheet"/>
+	<link href="{% static 'assets/plugins/simplebar/css/simplebar.css' %}" rel="stylesheet" />
+	<link href="{% static 'assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet" />
+	<link href="{% static 'assets/plugins/metismenu/css/metisMenu.min.css' %}" rel="stylesheet" />
+	<!-- loader -->
+	<link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet" />
+	<script src="{% static 'assets/js/pace.min.js' %}"></script>
+	<!-- Bootstrap CSS -->
+	<link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
+	<link href="{% static 'assets/css/icons.css' %}" rel="stylesheet">
+	<!-- Theme Style CSS -->
+	<link rel="stylesheet" href="{% static 'assets/css/dark-theme.css' %}" />
+	<link rel="stylesheet" href="{% static 'assets/css/semi-dark.css' %}" />
+	<link rel="stylesheet" href="{% static 'assets/css/header-colors.css' %}" />
+
+{% comment %} Header for index  {% endcomment %}           
+
+	<!--FontAwesome CDN-->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <!--Chartjs CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <title>Jononi Management System</title>
+
+</head>
+
+<body>
+	<!--wrapper-->
+	<div class="wrapper">
+		<!--sidebar wrapper -->
+		<div class="sidebar-wrapper" data-simplebar="true" style="background-color: #1d9439; " >
+			<div class="sidebar-header">
+				<div>
+					<a href="{% url 'warehouse-index' %}" class="has-arrow">
+						<img src="{% static 'assets/images/logo.png' %}" class="logo-icon" alt="logo icon" style="width: 210px; height: 170;">
+					</a> 
+
+					
+				</div>
+				
+				<div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
+				</div>
+			</div>
+			<!--navigation-->
+			<ul class="metismenu" id="menu" >
+				<li> 
+					{% if is_admin %}	
+					<a href="{% url 'home' %}" class="has-arrow">
+						<div style="color: #FFFFFF; "class="parent-icon"><i class='bx bx-home-circle'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Dashboard</div>
+					</a>
+                    {% endif %} 
+
+					{% if is_sr %}	
+					<a href="{% url 'warehouse-index' %}" class="has-arrow">
+						<div style="color: #FFFFFF; "class="parent-icon"><i class='bx bx-home-circle'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Dashboard</div>
+					</a>
+                    {% endif %} 
+
+					{% if is_dealer %}	
+					<a href="{% url 'sr-order' %}" class="has-arrow">
+						<div style="color: #FFFFFF; "class="parent-icon"><i class='bx bx-home-circle'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Dashboard</div>
+					</a>
+                    {% endif %} 
+
+					{% if is_rsm %}	
+					<a href="{% url 'dealer_demand_check' %}" class="has-arrow">
+						<div style="color: #FFFFFF; "class="parent-icon"><i class='bx bx-home-circle'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Dashboard</div>
+					</a>
+                    {% endif %} 
+
+					{% if is_hos %}	
+					<a href="{% url 'hos_dealer_demand' %}" class="has-arrow">
+						<div style="color: #FFFFFF; "class="parent-icon"><i class='bx bx-home-circle'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Dashboard</div>
+					</a>
+                    {% endif %} 
+
+				</li>
+				{% comment %} <li>
+					<a href="javascript:;" class="has-arrow">
+						<div  style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Application</div>
+					</a>
+					<ul>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Email</a>
+						</li>
+						<!-- <li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Chat Box</a>
+						</li> -->
+						<!-- <li> <a href="app-file-manager.html"><i class="bx bx-right-arrow-alt"></i>File Manager</a>
+						</li>
+						<li> <a href="app-contact-list.html"><i class="bx bx-right-arrow-alt"></i>Contatcs</a>
+						</li>
+						<li> <a href="app-to-do.html"><i class="bx bx-right-arrow-alt"></i>Todo List</a>
+						</li>
+						<li> <a href="app-invoice.html"><i class="bx bx-right-arrow-alt"></i>Invoice</a>
+						</li>
+						<li> <a href="app-fullcalender.html"><i class="bx bx-right-arrow-alt"></i>Calendar</a>
+						</li> -->
+					</ul>
+				</li>  {% endcomment %}
+				<li class="menu-label" style="color: #FFFFFF;">Sales Dept</li>
+				<!-- <li>
+					<a href="{% url 'add-shope' %}">
+						<div class="font-22 text-primary">	<i class="lni lni-apartment"></i></div> 
+						<div class="menu-title">Add Shop</div>
+					</a>
+				</li> -->
+				{% if is_sr  %}
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div  style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-cart'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Sell Activity</div> 
+					</a>
+					<ul>
+						{% comment %} <li> <a href="{% url 'daily_report' %}"><i class="bx bx-right-arrow-alt"></i>Daily Report</a>
+						</li>						 {% endcomment %}
+						<li> <a href="{% url 'warehouse-index' %}"><i class="bx bx-right-arrow-alt"></i>Place Order</a>
+						</li>
+						<li> <a href="{% url 'order_manage' %}"><i class="bx bx-right-arrow-alt"></i>Manage My Orders</a>
+						</li>
+						<li> <a href="{% url 'active_offer_list' %}"><i class="bx bx-right-arrow-alt"></i>Offer Review</a>
+						</li>
+						<li> <a href="{% url 'add-shope' %}"><i class="bx bx-right-arrow-alt"></i>Add Customer</a>
+						</li>  
+
+					</ul>
+				</li>
+
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div class="parent-icon"><i class="bx bx-repeat"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Warehouse Activity</div>
+					</a>
+					<ul>
+						
+						<li> <a href="{% url 'order_summary' %}"><i class="bx bx-right-arrow-alt"></i>Summary</a></li>
+						<li> <a href="{% url 'user_stocks' %}"><i class="bx bx-right-arrow-alt"></i>Stock Check</a></li>
+						<li> <a href="{% url 'demand' %}"><i class="bx bx-right-arrow-alt"></i>Add Demand Request </a>
+						<li> <a href="{% url 'demand_check' %}"><i class="bx bx-right-arrow-alt"></i>My Demand Check</a> 						
+						<li> <a href="{% url 'payment-commission' %}"><i class="bx bx-right-arrow-alt"></i>Commission and Payment</a> 						
+						</li>
+					</ul>
+				</li> 
+				{% endif %} 
+
+				{% if is_admin %}
+
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-bookmark-heart'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Warehouse's Activity</div>
+					</a>
+					<ul>						
+						<li> <a href="{% url 'all_warehouse_stocks' %}"><i class="bx bx-right-arrow-alt"></i>Warehouse's Summary</a></li>	
+						<li> <a href="{% url 'warehouse_stocks' %}"><i class="bx bx-right-arrow-alt"></i>Warehouse Stock Check</a> </li>				
+						<li> <a href="{% url 'dealers_demand' %}"><i class="bx bx-right-arrow-alt"></i>Warehouse's Demand list</a> </li>						
+						<li> <a href="{% url 'order' %}"><i class="bx bx-right-arrow-alt"></i>Warehouse's Sell Review</a></li>
+					</ul>
+				</li>
+					
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"> <i class="bx bx-donate-blood"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Management</div>
+					</a>
+					<ul>
+						<li> <a href="{% url 'admin_summary' %}"><i class="bx bx-right-arrow-alt"></i>Factory sell Summary</a>
+						<li> <a href="{% url 'admin_stocks' %}"><i class="bx bx-right-arrow-alt"></i>Factory Stock Check</a>
+						<li> <a href="{% url 'dashboard-products' %}"><i class="bx bx-right-arrow-alt"></i>Create New Product</a>  
+						</li>
+						<li> <a href="{% url 'offer_create' %}"><i class="bx bx-right-arrow-alt"></i>Create New Offer</a>  
+						</li>
+						<li> <a href="{% url 'offer_list' %}"><i class="bx bx-right-arrow-alt"></i>Manage Offers</a>
+						</li>
+						<li> <a href="{% url 'dashboard-customers' %}"><i class="bx bx-right-arrow-alt"></i>Employee Activity</a>
+						</li>	
+					</ul>
+				</li>
+				{% endif %} 
+
+				{% if is_rsm %}	
+
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-message-square-edit'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">RSM</div>
+					</a>
+					<ul>
+						<li> <a href="{% url 'dealer_demand_check' %}"><i class="bx bx-right-arrow-alt"></i>Dealer's Demand</a>
+						</li>
+						<li> <a href="{% url 'sr_orders' %}"><i class="bx bx-right-arrow-alt"></i>SR's Orders Check</a>
+						</li>
+						<!-- <li> <a href="{% url 'sr_orders' %}"><i class="bx bx-right-arrow-alt"></i>SR's Activity</a>
+						</li> -->
+						<li> <a href="{% url 'user-register' %}"><i class="bx bx-right-arrow-alt"></i>Register New Dealer</a>
+						</li>						
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Sales Return Check</a>
+						</li>						
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Adjust Dealer's Order according to HOS's review</a>
+						</li>						
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Daily Activity</a>
+						</li>						
+					</ul>
+				</li>
+				
+				{% endif %}  
+
+				{% if is_hos %}	
+
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-message-square-edit'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">HOS</div>
+					</a>
+					<ul>
+						<li> <a href="{% url 'hos_dealer_demand' %}"><i class="bx bx-right-arrow-alt"></i>Dealer's Demand</a>
+						</li>
+						
+												
+					</ul>
+				</li>
+				
+				{% endif %}  
+
+				{% if is_finance %}	
+
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-message-square-edit'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Finance</div>
+					</a>
+					<ul>
+						
+						<li> <a href="{% url 'summary' %}"><i class="bx bx-right-arrow-alt"></i>Summary</a>
+						</li>
+						<li> <a href="{% url 'transaction_history' %}"><i class="bx bx-right-arrow-alt"></i>Transaction-History</a>
+						</li>
+						<li> <a href="{% url 'credit_list' %}"><i class="bx bx-right-arrow-alt"></i> View Credits</a>
+						</li>
+						<li> <a href="{% url 'debit_list' %}"><i class="bx bx-right-arrow-alt"></i>View Debits</a>
+						</li>
+						<li> <a href="{% url 'add_debit' %}"><i class="bx bx-right-arrow-alt"></i>Add Debit Transaction</a>
+						</li>
+						<li> <a href="{% url 'add_credit' %}"><i class="bx bx-right-arrow-alt"></i>Take a Loan (Add Credit)</a>
+						</li>
+						
+												
+					</ul>
+				</li>
+				
+				{% endif %}  
+				
+				<!-- <li class="menu-label">Forms & Tables</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class='bx bx-message-square-edit'></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Forms</div>
+					</a>
+					<ul>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Form Elements</a>
+						</li>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Input Groups</a>
+						</li>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Forms Layouts</a>
+						</li>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Form Validation</a>
+						</li>						
+					</ul>
+				</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-grid-alt"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Tables</div>
+					</a>
+					<ul>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Basic Table</a>
+						</li>
+						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Data Table</a>
+						</li>
+					</ul>
+				</li> -->
+				<li class="menu-label">Pages</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-lock"></i>
+						</div>
+						<div style="color: #FFFFFF; " class="menu-title">Authentication</div>
+					</a>
+					<ul>
+						<li> <a href="{% url 'user-login' %}" target="_blank"><i class="bx bx-right-arrow-alt"></i>Sign In</a>
+						</li>
+						<li> <a href="{% url 'user-register' %}" target="_blank"><i class="bx bx-right-arrow-alt"></i>Sign Up</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="{% url 'user-profile' %}">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-user-circle"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">User Profile</div>
+					</a>
+				</li>
+				{% comment %} <li>
+					<a href="#">
+						<div style="color: #FFFFFF; " class="parent-icon"> <i class="bx bx-video-recording"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Timeline</div>
+					</a>
+				</li> {% endcomment %}
+				{% comment %} <li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-error"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Errors</div>
+					</a>
+					<ul>
+						<li> <a href="#" target="_blank"><i class="bx bx-right-arrow-alt"></i>404 Error</a>
+						</li>
+						<li> <a href="#" target="_blank"><i class="bx bx-right-arrow-alt"></i>500 Error</a>
+						</li>
+						<li> <a href="#" target="_blank"><i class="bx bx-right-arrow-alt"></i>Coming Soon</a>
+						</li>
+						<li> <a href="#" target="_blank"><i class="bx bx-right-arrow-alt"></i>Blank Page</a>
+						</li>
+					</ul>
+				</li> {% endcomment %}
+				<!-- <li>
+					<a href="faq.html">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-help-circle"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">FAQ</div>
+					</a>
+				</li>
+				<li>
+					<a href="pricing-table.html">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-diamond"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Pricing</div>
+					</a>
+				</li>
+				<li class="menu-label">Charts & Maps</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-line-chart"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Charts</div>
+					</a>
+					<ul>
+						<li> <a href="charts-apex-chart.html"><i class="bx bx-right-arrow-alt"></i>Apex</a>
+						</li>
+						<li> <a href="charts-chartjs.html"><i class="bx bx-right-arrow-alt"></i>Chartjs</a>
+						</li>
+						<li> <a href="charts-highcharts.html"><i class="bx bx-right-arrow-alt"></i>Highcharts</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-map-alt"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Maps</div>
+					</a>
+					<ul>
+						<li> <a href="map-google-maps.html"><i class="bx bx-right-arrow-alt"></i>Google Maps</a>
+						</li>
+						<li> <a href="map-vector-maps.html"><i class="bx bx-right-arrow-alt"></i>Vector Maps</a>
+						</li>
+					</ul>
+				</li>
+				<li class="menu-label">Others</li>
+				<li>
+					<a class="has-arrow" href="javascript:;">
+						<div style="color: #FFFFFF; " class="parent-icon"><i class="bx bx-menu"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Menu Levels</div>
+					</a>
+					<ul>
+						<li> <a class="has-arrow" href="javascript:;"><i class="bx bx-right-arrow-alt"></i>Level One</a>
+							<ul>
+								<li> <a class="has-arrow" href="javascript:;"><i class="bx bx-right-arrow-alt"></i>Level Two</a>
+									<ul>
+										<li> <a href="javascript:;"><i class="bx bx-right-arrow-alt"></i>Level Three</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="https://codervent.com/rukada/documentation/index.html" target="_blank">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-folder"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Documentation</div>
+					</a>
+				</li>
+				<li>
+					<a href="https://themeforest.net/user/codervent" target="_blank">
+						<div style="color: #FFFFFF; "  class="parent-icon"><i class="bx bx-support"></i>
+						</div>
+						<div class="menu-title" style="color: #FFFFFF;">Support</div>
+					</a>
+				</li> -->
+			</ul>
+			<!--end navigation-->
+		</div>
+		<!--end sidebar wrapper -->
+		<!--start header -->
+		<header>
+			
+			<div class="topbar d-flex align-items-center"  style="background-color:#23282c;" >
+				<nav class="navbar navbar-expand">
+					<div style="color :#FFFFFF;" class="mobile-toggle-menu"><i class='bx bx-menu'></i>
+					</div>
+					<div class="search-bar flex-grow-1">
+						<div class="position-relative search-bar-box">
+							<input type="text" class="form-control search-control" placeholder="Type to search..."> <span class="position-absolute top-50 search-show translate-middle-y"><i class='bx bx-search'></i></span>
+							<span class="position-absolute top-50 search-close translate-middle-y"><i class='bx bx-x'></i></span>
+						</div>
+					</div>
+					<div class="top-menu ms-auto">
+						<ul class="navbar-nav align-items-center">
+							<li class="nav-item mobile-search-icon">
+								<a class="nav-link" href="#">	<i class='bx bx-search'></i>
+								</a>
+							</li>
+							<li class="nav-item dropdown dropdown-large">
+								<a style="color: white;" class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">	<i class='bx bx-category'></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-end">
+									<div class="row row-cols-3 g-3 p-3">
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-cosmic text-white"><i class='bx bx-group'></i>
+											</div>
+											<div class="app-title">Teams</div>
+										</div>
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-atom'></i>
+											</div>
+											<div class="app-title">Projects</div>
+										</div>
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-lush text-white"><i class='bx bx-shield'></i>
+											</div>
+											<div class="app-title">Tasks</div>
+										</div>
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-kyoto text-dark"><i class='bx bx-notification'></i>
+											</div>
+											<div class="app-title">Feeds</div>
+										</div>
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-blues text-dark"><i class='bx bx-file'></i>
+											</div>
+											<div class="app-title">Files</div>
+										</div>
+										<div class="col text-center">
+											<div class="app-box mx-auto bg-gradient-moonlit text-white"><i class='bx bx-filter-alt'></i>
+											</div>
+											<div class="app-title">Alerts</div>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="nav-item dropdown dropdown-large">
+
+								<div class="dropdown-menu dropdown-menu-end">
+									<a href="javascript:;">
+										<div class="msg-header">
+											<p class="msg-header-title">Jononi Agro Industries Ltd</p>
+											<p class="msg-header-clear ms-auto"></p>
+										</div>
+									</a>
+									<div class="header-notifications-list">
+										
+										
+									</div>
+									<a href="javascript:;">
+										<div class="text-center msg-footer">Back to the page</div>
+									</a>
+								</div>
+							</li>
+							<li class="nav-item dropdown dropdown-large">
+								
+								<div class="dropdown-menu dropdown-menu-end">
+									<a href="javascript:;">
+										<div class="msg-header">
+											<p class="msg-header-title">Jononi Agro Industries Ltd</p>
+											<p class="msg-header-clear ms-auto"></p>
+										</div>
+									</a>
+									<div class="header-message-list">
+										
+										
+									</div>
+									<a href="javascript:;">
+										<div class="text-center msg-footer">Back to the page</div>
+									</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="user-box dropdown">
+						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">							
+							<img src="{{ user.profile.image.url }}" class="user-img" alt="user avatar">
+							<div class="user-info ps-3">
+								<p style="color: white;" class="user-name mb-0">{{ user.username }}</p>
+								<p style="color: white;" class="designattion mb-0">{{ user.email }}</p>
+							</div>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end">
+							<li><a class="dropdown-item" href="{% url 'user-profile' %}"><i class="bx bx-user"></i><span>Profile</span></a>
+							</li>
+							
+							<li><a class="dropdown-item" href="{% url 'warehouse-index' %}"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
+							</li>
+							
+								<div class="dropdown-divider mb-0"></div>
+							</li>
+						    <li>
+								<form method="POST" action="{% url 'user-logout' %}" style="display: inline;">
+									{% csrf_token %}
+									<button type="submit" class="dropdown-item" style="border: none; padding: 0; background: none; cursor: pointer;">
+										<i class='bx bx-log-out-circle'></i>
+										<span>Logout</span>
+									</button>
+								</form>
+							</li>
+							
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</header>
+		<!--end header -->
+		<!--start page wrapper -->
+        {% block content %}
+
+        {% endblock %}
+		<!--end page wrapper -->
+		<!--start overlay-->
+		<div class="overlay toggle-icon"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		<footer class="page-footer">
+			<p class="mb-0">Copyright © 2024. PKIT Group.</p>
+		</footer>
+	</div>
+	<!--end wrapper-->
+	<!--start switcher-->
+	<div class="switcher-wrapper">
+		<div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
+		</div>
+		<div class="switcher-body">
+			<div class="d-flex align-items-center">
+				<h5 class="mb-0 text-uppercase">Theme Customizer</h5>
+				<button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
+			</div>
+			<hr/>
+			<h6 class="mb-0">Theme Styles</h6>
+			<hr/>
+			<div class="d-flex align-items-center justify-content-between">
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="flexRadioDefault" id="lightmode" checked>
+					<label class="form-check-label" for="lightmode">Light</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="flexRadioDefault" id="darkmode">
+					<label class="form-check-label" for="darkmode">Dark</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="flexRadioDefault" id="semidark">
+					<label class="form-check-label" for="semidark">Semi Dark</label>
+				</div>
+			</div>
+			<hr/>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" id="minimaltheme" name="flexRadioDefault">
+				<label class="form-check-label" for="minimaltheme">Minimal Theme</label>
+			</div>
+			<hr/>
+			<h6 class="mb-0">Header Colors</h6>
+			<hr/>
+			<div class="header-colors-indigators">
+				<div class="row row-cols-auto g-3">
+					<div class="col">
+						<div class="indigator headercolor1" id="headercolor1"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor2" id="headercolor2"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor3" id="headercolor3"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor4" id="headercolor4"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor5" id="headercolor5"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor6" id="headercolor6"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor7" id="headercolor7"></div>
+					</div>
+					<div class="col">
+						<div class="indigator headercolor8" id="headercolor8"></div>
+					</div>
+				</div>
+			</div>
+			<hr/>
+			<h6 class="mb-0">Sidebar Colors</h6>
+			<hr/>
+			<div class="header-colors-indigators">
+				<div class="row row-cols-auto g-3">
+					<div class="col">
+						<div class="indigator sidebarcolor1" id="sidebarcolor1"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor2" id="sidebarcolor2"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor3" id="sidebarcolor3"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor4" id="sidebarcolor4"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor5" id="sidebarcolor5"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor6" id="sidebarcolor6"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor7" id="sidebarcolor7"></div>
+					</div>
+					<div class="col">
+						<div class="indigator sidebarcolor8" id="sidebarcolor8"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+	<!--end switcher-->
+	<!-- Bootstrap JS -->
+	<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+	<!--plugins-->
+	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'assets/plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'assets/plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+	<script src="{% static 'assets/plugins/Drag-And-Drop/dist/imageuploadify.min.js' %}"></script>
+	
+	<script>
+		$(document).ready(function () {
+			$('#image-uploadify').imageuploadify();
+		})
+	</script>
+	<!--app JS-->
+	<script src="{% static 'assets/js/app.js' %}"></script>
+
+
+
+	<!--end switcher-->
+	<!-- Bootstrap JS -->
+	<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+	<!-- plugins -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'plugins/simplebar/js/simplebar.min.js' %}"></script>
+	<script src="{% static 'plugins/metismenu/js/metisMenu.min.js' %}"></script>
+	<script src="{% static 'plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
+	<script src="{% static 'plugins/chartjs/js/Chart.min.js' %}"></script>
+	<script src="{% static 'plugins/vectormap/jquery-jvectormap-2.0.2.min.js' %}"></script>
+	<script src="{% static 'plugins/vectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+	<script src="{% static 'plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js' %}"></script>
+	<script src="{% static 'plugins/sparkline-charts/jquery.sparkline.min.js' %}"></script>
+	<script src="{% static 'plugins/jquery-knob/excanvas.js' %}"></script>
+	<script src="{% static 'plugins/jquery-knob/jquery.knob.js' %}"></script>
+	<script>
+		$(function() {
+			$(".knob").knob();
+		});
+	</script>
+	<script src="{% static 'js/index.js' %}"></script>
+	<!-- app JS -->
+	<script src="{% static 'js/app.js' %}"></script> 
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+{% extends 'partials/base0.html' %}
+{% block title %}Active Offers{% endblock %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    /* Hover shadow effect for product cards */
+    .hover-shadow:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Custom card style */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        
+    }
+
+    .card:hover {
+        transform: translateY(-5px); /* Subtle lift effect */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+    }
+
+    /* Styling for the buttons inside the card */
+    .btn-sm {
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-sm:hover {
+        transform: scale(1.05); /* Slightly increase the size of the button on hover */
+    }
+
+    /* Add animation for offer text (fade in) */
+    .product-discount {
+        opacity: 0;  /* Initially invisible */
+        animation: fadeIn 1s forwards;  /* Apply fade-in animation */
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+
+<!-- Start page wrapper -->
+<div class="page-wrapper">
+    <div class="page-content">
+
+        <div class="row my-4">
+            
+            <!-- Add New Product Section -->
+            <div class="col-md-4">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="card shadow-lg p-4 mb-4 rounded" style="background: linear-gradient(to right, #1d9439, #e25a5a);">
+                    <h5 class="text-white font-weight-bold">Add New Products</h5>
+                    <hr class="text-white">
+                    <form style="color: white; " method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <!-- Add this in your HTML -->
+                         <br>
+                        <button class="btn" style="background-color: #007bff; color: white; border: none; font-weight: 500; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: background-color 0.3s, transform 0.2s ease-in-out;" onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor='#007bff'; this.style.transform='scale(1)';"><i class="fas fa-plus mr-2"></i> Add</button>
+
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <!-- Product Listing Section -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-3 product-grid">
+                    {% for product in product %}
+                    <div class="col">
+                        <div  class="card">
+                            <br>
+                            <div style="text-align: center;">
+                                <img style="height: 80px; width: 50%;" src="{% static 'assets/images/logo.png' %}" class="card-img-top" alt="...">
+                            </div>
+                            <div class="">
+                                {% if product.active_offer %}
+                                <div class="position-absolute top-0 end-0 m-3 product-discount" style="background-color: #1d9439; padding: 5px 30px; border-radius: 15px; color: white;">
+                                    <span style="font-weight: bold;" class="">{{ product.active_offer.discount_percentage }}%</span>
+                                </div>
+
+                                {% else %}
+                                <div class="position-absolute top-0 end-0 m-3 product-discount" style="background-color: rgba(255, 123, 0, 0.945); padding: 5px 30px; border-radius: 5px; color: white;">
+                                    <span style="color: black;" class="">0.00%</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">{{ product.name }}</h5>
+                                    <div style="display: flex; align-items: center; background-color: #f4f4f4; padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: 'Arial', sans-serif; max-width: 300px; margin-top: 10px;"><i class="fas fa-box" style="font-size: 24px; color: #4CAF50; margin-right: 10px;"></i><span style="font-size: 16px; font-weight: bold; color: #333;">Stock:</span> <span style="font-size: 18px; color: #333;">{{product.stock_quantity}}</span></div>
+                                    <br>
+                                    <p class="card-text">
+                                        <strong>Category:</strong> {{ product.department }}<br>
+                                        <strong>Product Code:</strong> {{ product.product_code }}<br>
+                                        <strong>DP:</strong> {{ product.product_dp }}<br>
+                                        <strong>TP:</strong> {{ product.product_tp }}<br>
+                                        <strong>SKU:</strong> {{ product.product_sku }}
+                                    </p> 
+
+                                    <div class="d-flex justify-content-between">
+                                        <a class="btn btn-info btn-sm text-white" href="{% url 'dashboard-products-edit' product.id %}">
+                                            <i class="fas fa-edit" style="font-size: 0.75rem;"></i> Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm text-white" href="{% url 'dashboard-products-delete' product.id %}">
+                                            <i class="fas fa-trash" style="font-size: 0.75rem;"></i> Delete
+                                        </a>
+                                    </div>
+                                    
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

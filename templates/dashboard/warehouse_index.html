@@ -1,0 +1,117 @@
+{% load crispy_forms_tags %}
+<br>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-12">  
+            <br>
+            <h4 class="heading-primary">ক্রেতার অর্ডার পরিচালনা</h4>
+            <form method="POST" class="order-form">
+                {% csrf_token %}
+
+                <!-- Shop Selection Dropdown -->
+                <div class="form-group">
+                    <label for="shop-select" class="form-label">ক্রেতা নির্বাচন করুন (অত্যাবশ্যক)</label>
+                    <select name="selected_shop" id="shop-select" class="form-control shop-select">
+                        <option value="">**এখানে ক্লিক করুন**</option>
+                        {% for shop in shops %}
+                            <option value="{{ shop.id }}" {% if selected_shop and selected_shop.id == shop.id %}selected{% endif %}>
+                                {{ shop.shop_name }} - {{ shop.shop_owner }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Management Form for Formset -->
+                {{ formset.management_form }}
+
+                <!-- Product Form Container -->
+                <div id="product-form-container" class="product-forms">
+                    {% for form in formset %}
+                        <div class="product-form card">
+                            {{ form|crispy }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions d-flex justify-content-between mt-4">
+                    <button type="button" id="add-product-btn" class="btn btn-primary shadow-sm">
+                        <i class="fas fa-plus"></i> পণ্য যোগ করুন
+                    </button>
+                    <button type="button" id="remove-product-btn" class="btn btn-danger shadow-sm">
+                        <i class="fas fa-minus"></i> পণ্য বাদ দিন
+                    </button>
+                </div>
+
+                <div class="mt-5 text-center">
+                    <button type="submit" class="btn btn-success btn-lg shadow">
+                        অর্ডার করুন
+                    </button>
+                </div>
+            </form>
+
+            <!-- JavaScript for Fetching Product TP -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const formContainer = document.getElementById('product-form-container');
+            
+                    // Listen for changes in the product dropdown
+                    formContainer.addEventListener('change', function (event) {
+                        if (event.target && event.target.name.includes('name')) {
+                            const productId = event.target.value; // Selected product ID
+                            const formIndex = event.target.name.match(/\d+/)[0]; // Extract form index
+                            const productTpField = document.querySelector(`input[name="form-${formIndex}-product_tp"]`);
+            
+                            if (productId) {
+                                // Fetch the product TP via AJAX
+                                fetch(`/get-product-tp/${productId}/`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.product_tp) {
+                                            productTpField.value = data.product_tp; // Set product TP value
+                                            productTpField.readOnly = false; // Make the field editable
+                                        } else {
+                                            productTpField.value = ''; // Clear field if no data
+                                            productTpField.readOnly = false; // Ensure it remains editable
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching product TP:', error);
+                                        productTpField.value = ''; // Clear field on error
+                                        productTpField.readOnly = false; // Ensure it remains editable
+                                    });
+                            } else {
+                                productTpField.value = ''; // Clear field if no product selected
+                                productTpField.readOnly = false; // Ensure it remains editable
+                            }
+                        }
+                    });
+            
+                    // Add product form functionality
+                    const addProductBtn = document.getElementById('add-product-btn');
+                    const removeProductBtn = document.getElementById('remove-product-btn');
+                    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+                    let formNum = formContainer.getElementsByClassName('product-form').length - 1;
+            
+                    addProductBtn.addEventListener('click', function () {
+                        formNum++;
+                        const newForm = formContainer.firstElementChild.cloneNode(true);
+                        const formRegex = new RegExp('form-(\\d+)', 'g');
+                        newForm.innerHTML = newForm.innerHTML.replace(formRegex, 'form-' + formNum);
+                        formContainer.appendChild(newForm);
+                        totalForms.value = formNum + 1;
+                    });
+            
+                    removeProductBtn.addEventListener('click', function () {
+                        if (formContainer.children.length > 1) {
+                            formContainer.lastElementChild.remove();
+                            formNum--;
+                            totalForms.value = formNum + 1;
+                        }
+                    });
+                });
+            </script>
+            
+        </div>
+    </div>
+</div>
+<br><br>
