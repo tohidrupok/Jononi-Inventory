@@ -18,7 +18,7 @@ Setup
 
 Clone the repository:
 
-git clone https://github.com/your-username/jononi-inventory.git
+git clone **https://github.com/your-username/jononi-inventory.git**
 
 Install dependencies:
 
